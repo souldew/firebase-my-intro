@@ -2,11 +2,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, DocumentData, getDocs } from "firebase/firestore";
 import { firestore } from "./firebase";
 
 export default function Home() {
-  const [snapshot, setSnapshot] = useState<any>(undefined);
+  const [snapshot, setSnapshot] = useState<DocumentData[] | undefined>(
+    undefined
+  );
   useEffect(() => {
     (async () => {
       const snapshot = await getDocs(
@@ -23,8 +25,8 @@ export default function Home() {
     <>
       {snapshot ? (
         <>
-          {snapshot.map((item: any) => {
-            return <div>{item.hoge}</div>;
+          {snapshot.map((item: DocumentData, i: number) => {
+            return <div key={i}>{item.hoge}</div>;
           })}
         </>
       ) : (
