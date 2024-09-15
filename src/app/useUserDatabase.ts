@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth, firestore } from "./firebase"; // 上で作成したfirebase.tsからimport
-import { getFirestore, collection } from "firebase/firestore";
+import { collection, CollectionReference } from "firebase/firestore";
 
 const useUserDatabase = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [dbRef, setDbRef] = useState<any>(null);
+  const [dbRef, setDbRef] = useState<CollectionReference | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
