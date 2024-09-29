@@ -1,8 +1,10 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth } from "../../firebase/firebase";
 import { useState } from "react";
 import Link from "next/link";
+import { useCookies } from "react-cookie";
+import router from "next/router";
 
 interface User {
   email: string;
@@ -15,6 +17,7 @@ interface Info {
 }
 
 export const Login = () => {
+  const [cookie, setCookie] = useCookies();
   const [info, setInfo] = useState<Info | undefined>(undefined);
   const {
     register,
@@ -32,7 +35,8 @@ export const Login = () => {
       );
       console.log(foo.user.uid);
       alert(`ログイン成功\n${foo.user.uid}`);
-      // router.push("/about");
+      setCookie("uid", foo.user.uid);
+      router.push("/about");
     } catch (e: any) {
       console.error(e);
       alert(e.message);
