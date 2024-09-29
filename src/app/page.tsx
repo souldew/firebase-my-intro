@@ -4,34 +4,38 @@
 import { useEffect, useState } from "react";
 import { collection, DocumentData, getDocs } from "firebase/firestore";
 import { firestore } from "./firebase";
+import { Login } from "./Login";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 export default function Home() {
-  const [snapshot, setSnapshot] = useState<DocumentData[] | undefined>(
-    undefined
-  );
-  useEffect(() => {
-    (async () => {
-      const snapshot = await getDocs(
-        collection(firestore, "test-cloud-firestore")
-      );
-      const snap = await snapshot.docs.map((doc) => {
-        return { ...doc.data() };
-      });
-      setSnapshot(snap);
-      console.log(snap);
-    })();
-  }, []);
-  return (
-    <>
-      {snapshot ? (
-        <>
-          {snapshot.map((item: DocumentData, i: number) => {
-            return <div key={i}>{item.hoge}</div>;
-          })}
-        </>
-      ) : (
-        <div>Loading...</div>
-      )}
-    </>
-  );
+  return <Login />;
+  // return <Login />;
+  // const [snapshot, setSnapshot] = useState<DocumentData[] | undefined>(
+  //   undefined
+  // );
+  // useEffect(() => {
+  //   (async () => {
+  //     const snapshot = await getDocs(
+  //       collection(firestore, "test-cloud-firestore")
+  //     );
+  //     const snap = await snapshot.docs.map((doc) => {
+  //       return { ...doc.data() };
+  //     });
+  //     setSnapshot(snap);
+  //     console.log(snap);
+  //   })();
+  // }, []);
+  // return (
+  //   <>
+  //     {snapshot ? (
+  //       <>
+  //         {snapshot.map((item: DocumentData, i: number) => {
+  //           return <div key={i}>{item.hoge}</div>;
+  //         })}
+  //       </>
+  //     ) : (
+  //       <div>Loading...</div>
+  //     )}
+  //   </>
+  // );
 }

@@ -2,26 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+header {
+  height: 50px;
 }
+
+main {
+  flex: 1;
+}
+
+input {
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 0 5px;
+}
+
+button {
+  background: gray;
+  border-radius: 5px;
+  padding: 2px 10px;
+}
+
+/* リンクの基本スタイル */
+a {
+  color: #007bff; /* テキストの色 */
+  text-decoration: none; /* 下線を削除 */
+  transition: color 0.3s ease; /* 色の変化にトランジションを追加 */
+}
+
+/* ホバー時のスタイル */
+a:hover {
+  color: #0056b3; /* ホバー時のテキスト色 */
+  text-decoration: underline; /* ホバー時に下線を表示 */
+}
+
+/* アクティブリンクのスタイル */
+a:active {
+  color: #003f7f; /* アクティブ時のテキスト色 */
+}
+
+/* 訪問済みリンクのスタイル */
+/* a:visited {
+  color: #6f42c1; /* 訪問済みリンクの色
+} */
+
+/* テストコード */
+/* body {
+  border: 1px solid red;
+}
+
+main {
+  background-color: skyblue;
+} */
