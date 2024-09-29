@@ -3,9 +3,8 @@
 
 import { useEffect, useState } from "react";
 import { collection, DocumentData, getDocs } from "firebase/firestore";
-import { firestore } from "./firebase";
-import { Login } from "./Login";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { firestore } from "../firebase/firebase";
+import { Login } from "./login/page";
 
 export default function Home() {
   return <Login />;
