@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { collection, DocumentData, getDocs } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
-import { Login } from "./login/page";
+import Login from "./login/page";
 
 export default function Home() {
   return <Login />;

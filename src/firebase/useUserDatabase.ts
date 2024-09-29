@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth, firestore } from "./firebase"; // 上で作成したfirebase.tsからimport
-import { collection, CollectionReference } from "firebase/firestore";
+import {
+  collection,
+  CollectionReference,
+  doc,
+  DocumentReference,
+} from "firebase/firestore";
 
 const useUserDatabase = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [dbRef, setDbRef] = useState<CollectionReference | null>(null);
+  const [dbRef, setDbRef] = useState<DocumentReference | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -16,9 +21,9 @@ const useUserDatabase = () => {
         const isAdmin = currentUser.email === "admin@example.com";
 
         if (isAdmin) {
-          setDbRef(collection(firestore, "adminData")); // Firestoreのadmin用データ
+          // setDbRef(collection(firestore, "adminData")); // Firestoreのadmin用データ
         } else {
-          setDbRef(collection(firestore, "userData")); // Firestoreの通常ユーザーデータ
+          setDbRef(doc(firestore, "test-cloud-firestore", currentUser.uid)); // Firestoreの通常ユーザーデータ
         }
       } else {
         setDbRef(null); // 認証されていない場合

@@ -1,10 +1,11 @@
+"use client";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
 import { useState } from "react";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 interface User {
   email: string;
@@ -16,7 +17,8 @@ interface Info {
   id: string;
 }
 
-export const Login = () => {
+export default function Login() {
+  const router = useRouter();
   const [cookie, setCookie] = useCookies();
   const [info, setInfo] = useState<Info | undefined>(undefined);
   const {
@@ -33,10 +35,11 @@ export const Login = () => {
         data.email,
         data.password
       );
-      console.log(foo.user.uid);
-      alert(`ログイン成功\n${foo.user.uid}`);
-      setCookie("uid", foo.user.uid);
+      // console.log(foo.user.uid);
+      // alert(`ログイン成功\n${foo.user.uid}`);
+      // setCookie("uid", foo.user.uid);
       router.push("/about");
+      return;
     } catch (e: any) {
       console.error(e);
       alert(e.message);
@@ -67,4 +70,4 @@ export const Login = () => {
       <footer className="bg-green-100">footer</footer>
     </>
   );
-};
+}
