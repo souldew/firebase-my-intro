@@ -1,9 +1,11 @@
 "use client";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "../../firebase/firebase";
 import { useState } from "react";
-import Link from "next/link";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 
@@ -17,7 +19,7 @@ interface Info {
   id: string;
 }
 
-export default function Login() {
+export default function signUp() {
   const router = useRouter();
   const [cookie, setCookie] = useCookies();
   const [info, setInfo] = useState<Info | undefined>(undefined);
@@ -30,11 +32,13 @@ export default function Login() {
   const onSubmit: SubmitHandler<User> = async (data) => {
     console.log(data);
     try {
-      const foo = await signInWithEmailAndPassword(
+      const credential = await createUserWithEmailAndPassword(
         auth,
         data.email,
         data.password
       );
+
+      await signInWithEmailAndPassword(auth, data.email, data.password);
       // console.log(foo.user.uid);
       // alert(`ログイン成功\n${foo.user.uid}`);
       // setCookie("uid", foo.user.uid);
@@ -47,7 +51,6 @@ export default function Login() {
   };
   return (
     <>
-      <Link href="/about">About</Link>
       <main className="flex flex-col">
         <div className="mt-auto mb-auto  bg-green-200 justify-center items-center">
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -61,8 +64,7 @@ export default function Login() {
                 <input type="password" {...register("password")} />
               </label>
               <div className="flex gap-x-4">
-                <button>Submit</button>
-                <Link href="/sign-up">新規登録</Link>
+                <button>register</button>
               </div>
             </div>
           </form>
