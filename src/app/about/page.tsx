@@ -43,6 +43,7 @@ const UserDataComponent = () => {
             setData(null); // ドキュメントが存在しない場合
           }
         } catch (err) {
+          console.log(err);
           setError("データの取得中にエラーが発生しました");
         } finally {
           setLoading(false);

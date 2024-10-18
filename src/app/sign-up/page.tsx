@@ -4,10 +4,12 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../../firebase/firebase";
+import { auth, firestore } from "../../firebase/firebase";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
+import { addDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import useUserDatabase from "@/firebase/useUserDatabase";
 
 interface User {
   email: string;
@@ -37,11 +39,21 @@ export default function signUp() {
         data.email,
         data.password
       );
+      const { user, dbRef } = useUserDatabase();
+      // const userRef = doc(
+      //   firestore,
+      //   "test-cloud-firestore",
+      //   credential.user.uid
+      // );
 
-      await signInWithEmailAndPassword(auth, data.email, data.password);
+      // await signInWithEmailAndPassword(auth, data.email, data.password); // createで自動ログインする
+      await setDoc(dbRef!, { hoge: "fooho" });
+
       // console.log(foo.user.uid);
       // alert(`ログイン成功\n${foo.user.uid}`);
       // setCookie("uid", foo.user.uid);
+      // 適当に登録と同時にデータの追加を行ってみる
+
       router.push("/about");
       return;
     } catch (e: any) {

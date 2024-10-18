@@ -35,7 +35,7 @@ export default function Login() {
         data.email,
         data.password
       );
-      // console.log(foo.user.uid);
+      console.log(foo.user.displayName);
       // alert(`ログイン成功\n${foo.user.uid}`);
       // setCookie("uid", foo.user.uid);
       router.push("/about");
