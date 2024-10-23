@@ -24,9 +24,8 @@
 import { useEffect, useState } from "react";
 import { getDoc, DocumentData } from "firebase/firestore";
 import useUserDatabase from "../../firebase/useUserDatabase";
-import Link from "next/link";
 
-const UserDataComponent = () => {
+const UserDataComponent2 = () => {
   const { user, dbRef } = useUserDatabase();
   const [data, setData] = useState<DocumentData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -69,11 +68,11 @@ const UserDataComponent = () => {
 
   return (
     <div>
+      <h1>about2</h1>
       <h2>{user.email} のデータ</h2>
       {data ? <div>{JSON.stringify(data)}</div> : <p>データが存在しません。</p>}
-      <Link href="/about2">About</Link>
     </div>
   );
 };
 
-export default UserDataComponent;
+export default UserDataComponent2;
