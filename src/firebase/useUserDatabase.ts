@@ -13,6 +13,7 @@ const useUserDatabase = () => {
   const [dbRef, setDbRef] = useState<DocumentReference | null>(null);
 
   useEffect(() => {
+    console.log("called useUserDatabase");
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
 
