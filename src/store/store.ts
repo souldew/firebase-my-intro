@@ -3,13 +3,15 @@ import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "firebase/auth";
 
 interface UserState {
-  name: string | undefined;
-  uid: string | undefined;
+  name: string | null;
+  uid: string | null;
+  email: string | null;
 }
 
 const initialUserState: UserState = {
-  name: undefined,
-  uid: undefined,
+  name: null,
+  uid: null,
+  email: null,
 };
 
 const userSlice = createSlice({
@@ -18,10 +20,13 @@ const userSlice = createSlice({
   reducers: {
     signin: (state, action: PayloadAction<Payload>) => {
       state.uid = action.payload.uid;
+      state.name = action.payload.name;
+      state.email = action.payload.email;
     },
     signout: (state) => {
-      state.name = undefined;
-      state.uid = undefined;
+      state.name = null;
+      state.uid = null;
+      state.email = null;
     },
   },
 });
@@ -33,3 +38,6 @@ export const store = configureStore({
     user: userSlice.reducer,
   },
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

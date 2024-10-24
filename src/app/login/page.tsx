@@ -6,6 +6,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
+import { signin } from "@/store/store";
+import { useDispatch } from "react-redux";
+import { Payload } from "@/types/types";
 
 interface User {
   email: string;
@@ -18,6 +21,7 @@ interface Info {
 }
 
 export default function Login() {
+  const dispatch = useDispatch();
   const router = useRouter();
   const [cookie, setCookie] = useCookies();
   const [info, setInfo] = useState<Info | undefined>(undefined);
@@ -35,7 +39,13 @@ export default function Login() {
         data.email,
         data.password
       );
-      console.log(foo.user.displayName);
+      const payload: Payload = {
+        uid: foo.user.uid,
+        email: foo.user.email,
+        name: foo.user.displayName,
+      };
+      dispatch(signin(payload));
+      // console.log(foo.user.displayName);
       // alert(`ログイン成功\n${foo.user.uid}`);
       // setCookie("uid", foo.user.uid);
       router.push("/about");
