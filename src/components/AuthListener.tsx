@@ -2,9 +2,7 @@
 
 import { signin, signout } from "@/store/store";
 import { auth } from "@/firebase/firebase";
-import { setDefaultResultOrder } from "dns";
-import { FirebaseError } from "firebase/app";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth";
 import { ReactNode, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Payload } from "@/types/types";
