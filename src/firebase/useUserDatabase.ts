@@ -33,6 +33,9 @@ const useUserDatabase = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      if (!user.uid) {
+        return;
+      }
       try {
         const docRef = doc(firestore, "test-cloud-firestore", user.uid!);
         const snapshot: DocumentSnapshot<DocumentData> = await getDoc(docRef);
