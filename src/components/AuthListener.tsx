@@ -2,15 +2,14 @@
 
 import { signin, signout } from "@/store/store";
 import { auth } from "@/firebase/firebase";
-import { onAuthStateChanged, User } from "firebase/auth";
-import { ReactNode, useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { ReactNode, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Payload } from "@/types/types";
 
 export function AuthListener({ children }: { children: ReactNode }) {
   const dispatch = useDispatch();
 
-  const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
     const unsubsribe = onAuthStateChanged(auth, (user) => {
       if (user) {

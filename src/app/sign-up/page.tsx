@@ -1,64 +1,36 @@
 "use client";
 import { SubmitHandler, useForm } from "react-hook-form";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { auth, firestore } from "../../firebase/firebase";
-import { useState } from "react";
-import { useCookies } from "react-cookie";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebase/firebase";
 import { useRouter } from "next/navigation";
-import { addDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import useUserDatabase from "@/firebase/useUserDatabase";
+import { FirebaseError } from "firebase/app";
 
 interface User {
   email: string;
   password: string;
 }
 
-interface Info {
-  email: string;
-  id: string;
-}
-
-export default function signUp() {
+export default function SignUp() {
   const router = useRouter();
-  const [cookie, setCookie] = useCookies();
-  const [info, setInfo] = useState<Info | undefined>(undefined);
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = useForm<User>();
 
   const onSubmit: SubmitHandler<User> = async (data) => {
     console.log(data);
     try {
-      const credential = await createUserWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
-      const { user, dbRef } = useUserDatabase();
-      // const userRef = doc(
-      //   firestore,
-      //   "test-cloud-firestore",
-      //   credential.user.uid
-      // );
-
-      // await signInWithEmailAndPassword(auth, data.email, data.password); // createで自動ログインする
-      await setDoc(dbRef!, { hoge: "fooho" });
-
-      // console.log(foo.user.uid);
-      // alert(`ログイン成功\n${foo.user.uid}`);
-      // setCookie("uid", foo.user.uid);
-      // 適当に登録と同時にデータの追加を行ってみる
+      await createUserWithEmailAndPassword(auth, data.email, data.password); // 自動ログイン
 
       router.push("/about");
       return;
-    } catch (e: any) {
-      console.error(e);
-      alert(e.message);
+    } catch (err) {
+      if (err instanceof FirebaseError) {
+        console.error(err);
+        alert(err.message);
+      }
     }
   };
   return (

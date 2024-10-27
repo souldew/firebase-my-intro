@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+// import localFont from "next/font/local";
 import "../styles/globals.css";
 import { Header } from "../components/Header";
-import { Provider } from "react-redux";
-import { store } from "@/store/store";
-import { AuthListener } from "@/components/AuthListener";
 import { ReduxProvider } from "./provider/ReduxProvider";
 
 // const geistSans = localFont({
