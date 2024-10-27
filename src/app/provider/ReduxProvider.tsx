@@ -9,7 +9,6 @@ export function ReduxProvider({ children }: { children: ReactNode }) {
   return (
     <Provider store={store}>
       <AuthListener>{children}</AuthListener>
-      {/* {children} */}
     </Provider>
   );
 }

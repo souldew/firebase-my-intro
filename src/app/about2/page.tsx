@@ -24,37 +24,40 @@
 import { useEffect, useState } from "react";
 import { getDoc, DocumentData } from "firebase/firestore";
 import useUserDatabase from "../../firebase/useUserDatabase";
+import Link from "next/link";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const UserDataComponent2 = () => {
-  const { user, dbRef } = useUserDatabase();
-  const [data, setData] = useState<DocumentData | null>(null);
+  const { userData } = useUserDatabase();
+  const user = useSelector((state: RootState) => state.user);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (dbRef) {
-        try {
-          setLoading(true);
-          const docSnapshot = await getDoc(dbRef); // Firestoreから個別データを取得
-          if (docSnapshot.exists()) {
-            setData(docSnapshot.data()); // 取得したデータを状態に保存
-          } else {
-            setData(null); // ドキュメントが存在しない場合
-          }
-        } catch (err) {
-          console.log(err);
-          setError("データの取得中にエラーが発生しました");
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (dbRef) {
+  //       try {
+  //         setLoading(true);
+  //         const docSnapshot = await getDoc(dbRef); // Firestoreから個別データを取得
+  //         if (docSnapshot.exists()) {
+  //           setData(docSnapshot.data()); // 取得したデータを状態に保存
+  //         } else {
+  //           setData(null); // ドキュメントが存在しない場合
+  //         }
+  //       } catch (err) {
+  //         console.log(err);
+  //         setError("データの取得中にエラーが発生しました");
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     }
+  //   };
 
-    fetchData();
-  }, [dbRef]);
+  //   fetchData();
+  // }, [dbRef]);
 
-  if (loading) {
+  if (user.uid === undefined) {
     return <p>Loading...</p>;
   }
 
@@ -62,15 +65,24 @@ const UserDataComponent2 = () => {
     return <p>{error}</p>;
   }
 
-  if (!user) {
-    return <p>ユーザーが認証されていません。</p>;
+  if (user === null) {
+    return (
+      <>
+        <p>ユーザーが認証されていません。</p>
+        <Link href="/about">about</Link>
+      </>
+    );
   }
 
   return (
     <div>
       <h1>about2</h1>
       <h2>{user.email} のデータ</h2>
-      {data ? <div>{JSON.stringify(data)}</div> : <p>データが存在しません。</p>}
+      {userData ? (
+        <div>{JSON.stringify(userData)}</div>
+      ) : (
+        <p>データが存在しません。</p>
+      )}
     </div>
   );
 };

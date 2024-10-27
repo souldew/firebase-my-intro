@@ -7,26 +7,21 @@ import { firestore } from "../firebase/firebase";
 import Login from "./login/page";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (user) {
+    if (user.uid !== null && user.uid !== undefined) {
       router.push("/about");
-    } else {
-      setLoading(false);
+    } else if (user.uid === null) {
+      router.push("/login");
     }
   }, [user, router]);
 
-  if (loading) {
-    return <p>loading</p>;
-  }
-
-  return <Login />;
+  return <p>loading...</p>;
 }
 
 // return <Login />;

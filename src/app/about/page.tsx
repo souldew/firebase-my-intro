@@ -29,46 +29,23 @@ import { useSelector } from "react-redux";
 import { RootState, store } from "@/store/store";
 
 const UserDataComponent = () => {
-  // const { user, dbRef } = useUserDatabase();
+  const { userData } = useUserDatabase();
   const user = useSelector((state: RootState) => state.user);
-  const [data, setData] = useState<DocumentData | null>(null);
+  // const [data, setData] = useState<DocumentData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (dbRef) {
-  //       try {
-  //         setLoading(true);
-  //         const docSnapshot = await getDoc(dbRef); // Firestoreから個別データを取得
-  //         if (docSnapshot.exists()) {
-  //           setData(docSnapshot.data()); // 取得したデータを状態に保存
-  //         } else {
-  //           setData(null); // ドキュメントが存在しない場合
-  //         }
-  //       } catch (err) {
-  //         console.log(err);
-  //         setError("データの取得中にエラーが発生しました");
-  //       } finally {
-  //         setLoading(false);
-  //       }
+  //   (async () => {
+  //     if (user) {
+  //       console.log("111", user);
+  //       setLoading(false);
+  //       console.log("hoho");
   //     }
-  //   };
+  //   })();
+  // }, [user]);
 
-  //   fetchData();
-  // }, [dbRef]);
-
-  useEffect(() => {
-    (async () => {
-      if (user.uid) {
-        console.log("111", user);
-        setLoading(false);
-        console.log("hoho");
-      }
-    })();
-  }, [user]);
-
-  if (loading) {
+  if (user.uid === undefined) {
     return <p>Loading...</p>;
   }
 
@@ -76,15 +53,19 @@ const UserDataComponent = () => {
     return <p>{error}</p>;
   }
 
-  if (!user) {
+  if (user.uid === null) {
     return <p>ユーザーが認証されていません。</p>;
   }
 
   return (
     <div>
       <h2>{user.email} のデータ</h2>
-      {data ? <div>{JSON.stringify(data)}</div> : <p>データが存在しません。</p>}
-      <Link href="/about2">About</Link>
+      {userData ? (
+        <div>{JSON.stringify(userData)}</div>
+      ) : (
+        <p>データが存在しません。</p>
+      )}
+      <Link href="/about2">About2へ移動</Link>
     </div>
   );
 };
