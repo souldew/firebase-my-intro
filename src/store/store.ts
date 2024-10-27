@@ -4,13 +4,13 @@ import { User } from "firebase/auth";
 
 interface UserState {
   name: string | null;
-  uid: string | null;
+  uid: string | null | undefined;
   email: string | null;
 }
 
 const initialUserState: UserState = {
   name: null,
-  uid: null,
+  uid: undefined,
   email: null,
 };
 

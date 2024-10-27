@@ -1,40 +1,66 @@
 import { useEffect, useState } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
-import { auth, firestore } from "./firebase"; // 上で作成したfirebase.tsからimport
+import { firestore } from "./firebase"; // 上で作成したfirebase.tsからimport
 import {
-  collection,
-  CollectionReference,
   doc,
-  DocumentReference,
+  DocumentData,
+  DocumentSnapshot,
+  getDoc,
+  setDoc,
 } from "firebase/firestore";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const useUserDatabase = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [dbRef, setDbRef] = useState<DocumentReference | null>(null);
+  // const [user, setUser] = useState<User | null>(null);
+  const user = useSelector((state: RootState) => state.user);
+  const [dbRef, setDbRef] = useState<DocumentData | undefined | null>(
+    undefined
+  );
+  const [userData, setUserData] = useState<DocumentData | undefined | null>(
+    undefined
+  );
+
+  const addNewData = async () => {
+    try {
+      const newData = {
+        hoge: "test-data-hogehoge2024:10-27T21",
+      };
+      console.log("user.uid test", user.uid);
+      const docRef = doc(firestore, "test-cloud-firestore", user.uid!);
+      await setDoc(docRef, newData, { merge: true });
+      console.log("addNewData successfully");
+    } catch (err) {
+      console.log("error");
+    }
+  };
+
+  const fetchUserData = async () => {
+    try {
+      const docRef = doc(firestore, "test-cloud-firestore", user.uid!);
+      const snapshot: DocumentSnapshot<DocumentData> = await getDoc(docRef);
+      if (snapshot.exists()) {
+        setUserData(snapshot.data());
+      } else {
+        setUserData(null);
+      }
+    } catch (err) {
+      console.log("userUserDatabase fetchUserData Error");
+    }
+  };
 
   useEffect(() => {
-    console.log("called useUserDatabase");
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    (async () => {
+      await fetchUserData();
+    })();
+    // console.log("called useUserDatabase");
+    // if (user) {
+    //   // setDbRef(doc(firestore, "test-cloud-firestore", user.uid!)); // Firestoreの通常ユーザーデータ
+    // } else {
+    //   setDbRef(null); // 認証されていない場合
+    // }
+  }, [user]);
 
-      if (currentUser) {
-        // ユーザーが存在する場合、特定のデータベースを選択
-        const isAdmin = currentUser.email === "admin@example.com";
-
-        if (isAdmin) {
-          // setDbRef(collection(firestore, "adminData")); // Firestoreのadmin用データ
-        } else {
-          setDbRef(doc(firestore, "test-cloud-firestore", currentUser.uid)); // Firestoreの通常ユーザーデータ
-        }
-      } else {
-        setDbRef(null); // 認証されていない場合
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  return { user, dbRef };
+  return { dbRef, userData, addNewData };
 };
 
 export default useUserDatabase;
