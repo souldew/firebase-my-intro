@@ -13,9 +13,6 @@ import { RootState } from "@/store/store";
 const useUserDatabase = () => {
   // const [user, setUser] = useState<User | null>(null);
   const user = useSelector((state: RootState) => state.user);
-  const [dbRef, setDbRef] = useState<DocumentData | undefined | null>(
-    undefined
-  );
   const [userData, setUserData] = useState<DocumentData | undefined | null>(
     undefined
   );
@@ -34,33 +31,24 @@ const useUserDatabase = () => {
     }
   };
 
-  const fetchUserData = async () => {
-    try {
-      const docRef = doc(firestore, "test-cloud-firestore", user.uid!);
-      const snapshot: DocumentSnapshot<DocumentData> = await getDoc(docRef);
-      if (snapshot.exists()) {
-        setUserData(snapshot.data());
-      } else {
-        setUserData(null);
-      }
-    } catch (err) {
-      console.log("userUserDatabase fetchUserData Error");
-    }
-  };
-
   useEffect(() => {
-    (async () => {
-      await fetchUserData();
-    })();
-    // console.log("called useUserDatabase");
-    // if (user) {
-    //   // setDbRef(doc(firestore, "test-cloud-firestore", user.uid!)); // Firestoreの通常ユーザーデータ
-    // } else {
-    //   setDbRef(null); // 認証されていない場合
-    // }
+    const fetchUserData = async () => {
+      try {
+        const docRef = doc(firestore, "test-cloud-firestore", user.uid!);
+        const snapshot: DocumentSnapshot<DocumentData> = await getDoc(docRef);
+        if (snapshot.exists()) {
+          setUserData(snapshot.data());
+        } else {
+          setUserData(null);
+        }
+      } catch (err) {
+        console.log("userUserDatabase fetchUserData Error");
+      }
+    };
+    fetchUserData();
   }, [user]);
 
-  return { dbRef, userData, addNewData };
+  return { userData, addNewData };
 };
 
 export default useUserDatabase;
